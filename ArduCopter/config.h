@@ -59,8 +59,6 @@
  # define CONFIG_IMU_TYPE   CONFIG_IMU_MPU6000
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
  # define MAGNETOMETER ENABLED
- # define PARACHUTE DISABLED
- # define AC_RALLY DISABLED
  # ifdef APM2_BETA_HARDWARE
   #  define CONFIG_BARO     AP_BARO_BMP085
  # else // APM2 Production Hardware (default)
@@ -71,11 +69,13 @@
  # define CONFIG_IMU_TYPE   CONFIG_IMU_SITL
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
  # define MAGNETOMETER ENABLED
+ # define OPTFLOW DISABLED
 #elif CONFIG_HAL_BOARD == HAL_BOARD_PX4
  # define CONFIG_IMU_TYPE   CONFIG_IMU_PX4
  # define CONFIG_BARO       AP_BARO_PX4
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
  # define MAGNETOMETER ENABLED
+ # define OPTFLOW DISABLED
 #elif CONFIG_HAL_BOARD == HAL_BOARD_FLYMAPLE
  # define CONFIG_IMU_TYPE CONFIG_IMU_FLYMAPLE
  # define CONFIG_BARO AP_BARO_BMP085
@@ -83,6 +83,7 @@
  # define CONFIG_ADC        DISABLED
  # define MAGNETOMETER ENABLED
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
+ # define OPTFLOW DISABLED
 #elif CONFIG_HAL_BOARD == HAL_BOARD_LINUX
  # define CONFIG_IMU_TYPE CONFIG_IMU_L3G4200D
  # define CONFIG_BARO AP_BARO_BMP085
@@ -90,11 +91,13 @@
  # define CONFIG_ADC        DISABLED
  # define MAGNETOMETER ENABLED
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
+ # define OPTFLOW DISABLED
 #elif CONFIG_HAL_BOARD == HAL_BOARD_VRBRAIN
  # define CONFIG_IMU_TYPE   CONFIG_IMU_VRBRAIN
  # define CONFIG_BARO       AP_BARO_VRBRAIN
  # define CONFIG_SONAR_SOURCE SONAR_SOURCE_ANALOG_PIN
  # define MAGNETOMETER ENABLED
+ # define OPTFLOW DISABLED
 #endif
 
 #if HAL_CPU_CLASS < HAL_CPU_CLASS_75 || CONFIG_HAL_BOARD == HAL_BOARD_AVR_SITL
@@ -140,6 +143,13 @@
   # define RATE_YAW_P                   0.150f
   # define RATE_YAW_I                   0.015f
 #endif
+
+
+// optical flow doesn't work in SITL yet
+#ifdef DESKTOP_BUILD
+# define OPTFLOW DISABLED
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////////
 // IMU Selection
@@ -403,7 +413,7 @@
 //////////////////////////////////////////////////////////////////////////////
 // Parachute release
 #ifndef PARACHUTE
- # define PARACHUTE ENABLED
+ # define PARACHUTE DISABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -513,6 +523,24 @@
  # define STABILIZE_YAW_P           4.5f
 #endif
 
+/* Stab_sat gains
+* #ifndef STAB_SAT_ROLL_P
+*  # define STAB_SAT_ROLL_P           4.5f
+* #endif
+* 
+* #ifndef STAB_SAT_PITCH_P
+ * # define STAB_SAT_PITCH_P          4.5f
+* #endif
+* 
+* #ifndef STAB_SAT_YAW_P
+ * # define STAB_SAT_YAW_P           4.5f
+* #endif
+*/
+
+#ifndef SAT_ANGLES_DEFAULT
+ # define SAT_ANGLES_DEFAULT        4500
+#endif
+
 // RTL Mode
 #ifndef RTL_ALT_FINAL
  # define RTL_ALT_FINAL             0       // the altitude the vehicle will move to as the final stage of Returning to Launch.  Set to zero to land.
@@ -560,7 +588,6 @@
 //////////////////////////////////////////////////////////////////////////////
 // Rate controller gains
 //
-
 #ifndef RATE_ROLL_P
  # define RATE_ROLL_P        		0.150f
 #endif
@@ -698,6 +725,7 @@
  # define THROTTLE_ACCEL_IMAX 500
 #endif
 
+
 //////////////////////////////////////////////////////////////////////////////
 // Dataflash logging control
 //
@@ -743,7 +771,7 @@
 #endif
 
 #ifndef AC_RALLY
- #define AC_RALLY   ENABLED
+ #define AC_RALLY               DISABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

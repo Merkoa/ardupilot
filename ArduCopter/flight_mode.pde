@@ -36,6 +36,10 @@ static bool set_mode(uint8_t mode)
                 success = stabilize_init(ignore_checks);
             #endif
             break;
+            
+        case STAB_SAT:
+            success = stab_sat_init(ignore_checks);
+            break;
 
         case ALT_HOLD:
             success = althold_init(ignore_checks);
@@ -139,6 +143,10 @@ static void update_flight_mode()
             #else
                 stabilize_run();
             #endif
+            break;
+            
+        case STAB_SAT:
+            stab_sat_run();
             break;
 
         case ALT_HOLD:
@@ -247,6 +255,7 @@ static bool manual_flight_mode(uint8_t mode) {
         case STABILIZE:
         case DRIFT:
         case SPORT:
+        case STAB_SAT:
             return true;
         default:
             return false;
@@ -267,6 +276,9 @@ print_flight_mode(AP_HAL::BetterStream *port, uint8_t mode)
         break;
     case ACRO:
         port->print_P(PSTR("ACRO"));
+        break;
+    case STAB_SAT:
+        port->print_P(PSTR("STAB_SAT"));
         break;
     case ALT_HOLD:
         port->print_P(PSTR("ALT_HOLD"));

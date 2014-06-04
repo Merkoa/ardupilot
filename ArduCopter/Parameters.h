@@ -115,6 +115,7 @@ public:
         k_param_serial0_baud,
         k_param_serial1_baud,
         k_param_serial2_baud,
+        k_param_sat_angles,
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -332,6 +333,8 @@ public:
     AP_Int8         failsafe_gps_enabled;       // gps failsafe enabled
     AP_Int8         failsafe_gcs;               // ground station failsafe behavior
     AP_Int16        gps_hdop_good;              // GPS Hdop value at or below this value represent a good position
+    
+    AP_Int16        sat_angles;                 // Saturation limit for roll-pitch target angles 
 
     AP_Int8         compass_enabled;
     AP_Int8         optflow_enabled;
@@ -430,15 +433,9 @@ public:
     AP_Int8                 acro_trainer;
 
     // PI/D controllers
-#if FRAME_CONFIG == HELI_FRAME
-    AC_HELI_PID             pid_rate_roll;
-    AC_HELI_PID             pid_rate_pitch;
-    AC_HELI_PID             pid_rate_yaw;
-#else
     AC_PID                  pid_rate_roll;
     AC_PID                  pid_rate_pitch;
     AC_PID                  pid_rate_yaw;
-#endif
     AC_PID                  pid_loiter_rate_lat;
     AC_PID                  pid_loiter_rate_lon;
 

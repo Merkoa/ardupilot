@@ -102,7 +102,8 @@
 #define FLIP        14                  // flip the vehicle on the roll axis
 #define AUTOTUNE    15                  // autotune the vehicle's roll and pitch gains
 #define HYBRID      16                  // hybrid - position hold with manual override
-#define NUM_MODES   17
+#define STAB_SAT    17                  // STAB mode with RC saturation
+#define NUM_MODES   18
 
 
 // CH_6 Tuning

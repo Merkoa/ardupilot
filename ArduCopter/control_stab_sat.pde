@@ -1,11 +1,11 @@
 /// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
 /*
- * control_sport.pde - init and run calls for sport flight mode
+ * control_stab_sat.pde - init and run calls for stabilize flight mode with target saturation
  */
 
-// sport_init - initialise sport controller
-static bool sport_init(bool ignore_checks)
+// stab_sat_init - initialise stab_sat controller
+static bool stab_sat_init(bool ignore_checks)
 {
     // set target altitude to zero for reporting
     // To-Do: make pos controller aware when it's active/inactive so it can always report the altitude error?
@@ -15,9 +15,9 @@ static bool sport_init(bool ignore_checks)
     return true;
 }
 
-// sport_run - runs the sport controller
+// stab_sat_run - runs the main stab_sat controller
 // should be called at 100hz or more
-static void sport_run()
+static void stab_sat_run()
 {
     int16_t target_roll, target_pitch;
     float target_yaw_rate;

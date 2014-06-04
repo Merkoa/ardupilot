@@ -36,6 +36,14 @@ static void get_pilot_desired_lean_angles(int16_t roll_in, int16_t pitch_in, int
     pitch_out = (int16_t)((float)pitch_in * _scaler);
 }
 
+// get_pilot_desired_angle_raw - passes pilot's roll or pitch input to the main controllers without rescaling or constrain
+// returns desired angle in centi-degrees
+static void get_pilot_desired_lean_angles_raw(int16_t roll_in, int16_t pitch_in, int16_t &roll_out, int16_t &pitch_out)
+{
+    roll_out = roll_in;
+    pitch_out = pitch_in;
+}
+
 // get_pilot_desired_heading - transform pilot's yaw input into a desired heading
 // returns desired angle in centi-degrees
 // To-Do: return heading as a float?
