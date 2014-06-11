@@ -6,8 +6,6 @@
 // variables
 #ifdef USERHOOK_VARIABLES
 
-int     prev_target_roll    0;
-int     prev_target_pitch   0;
 #endif  // USERHOOK_VARIABLES
 
 

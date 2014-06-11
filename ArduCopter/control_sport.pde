@@ -4,6 +4,8 @@
  * control_sport.pde - init and run calls for sport flight mode
  */
 
+static int prev_target_pitch;
+static int prev_target_roll;
 // sport_init - initialise sport controller
 static bool sport_init(bool ignore_checks)
 {
