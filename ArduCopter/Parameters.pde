@@ -540,11 +540,18 @@ const AP_Param::Info var_info[] PROGMEM = {
 
     // @Param: SAT_ANGLES
     // @DisplayName: Angle Saturation constant
-    // @Description: Constrains target angle for roll-pitch in STAB_SAT mode.
+    // @Description: Constrains target angle for roll-pitch in STAB_SAT mode and SPORT mode.
     // @Range: 0 4500
     // @User: Advanced
     GSCALAR(sat_angles, "SAT_ANGLES", SAT_ANGLES_DEFAULT),
     
+    // @Param: SAT_ANGLE_DERIV
+    // @DisplayName: Target angle's derivative saturation constant
+    // @Description: Constrains target angle's derivative for roll-pitch in STAB_SAT mode and SPORT mode.
+    // @Range: 0 4500
+    // @User: Advanced
+    GSCALAR(sat_angle_deriv, "SAT_ANGLE_DERIV", SAT_ANGLE_DERIV_DEFAULT),
+
     // @Param: ACRO_RP_P
     // @DisplayName: Acro Roll and Pitch P gain
     // @Description: Converts pilot roll and pitch into a desired rate of rotation in ACRO and SPORT mode.  Higher values mean faster rate of rotation.

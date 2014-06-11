@@ -10,6 +10,10 @@ static bool sport_init(bool ignore_checks)
     // set target altitude to zero for reporting
     // To-Do: make pos controller aware when it's active/inactive so it can always report the altitude error?
     pos_control.set_alt_target(0);
+    
+    // Init: prev target is 0
+    prev_target_pitch = 0;
+    prev_target_roll = 0;
 
     // stabilize should never be made to fail
     return true;
@@ -33,7 +37,7 @@ static void sport_run()
     // apply SIMPLE mode transform to pilot inputs
     update_simple_mode();
     
-    // convert pilot input to lean angles WITHOUT RESCALING OR CONTRAIN
+    // convert pilot input to lean angles WITHOUT RESCALING OR CONSTRAIN
     // To-Do: convert get_pilot_desired_lean_angles to return angles as floats
     get_pilot_desired_lean_angles_raw(g.rc_1.control_in, g.rc_2.control_in, target_roll, target_pitch);
 
@@ -51,7 +55,14 @@ static void sport_run()
     target_roll = constrain_int16(target_roll,-g.sat_angles,g.sat_angles);
     target_pitch = constrain_int16(target_pitch,-g.sat_angles,g.sat_angles);
     
-    // To-Do: apply saturation to target error (1st derivative saturation)
+    // Target rate saturation
+    // Read target rate
+    target_roll = constrain_int16(target_roll,prev_target_roll - g.sat_angle_deriv,prev_target_roll + g.sat_angle_deriv);
+    target_pitch = constrain_int16(target_pitch,prev_target_pitch - g.sat_angle_deriv,prev_target_pitch + g.sat_angle_deriv);
+    
+    // store targets for next iteration
+    prev_target_roll = target_roll;
+    prev_target_pitch = target_pitch;
     
     // reset target lean angles and heading while landed
     if (ap.land_complete) {

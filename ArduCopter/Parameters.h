@@ -116,6 +116,7 @@ public:
         k_param_serial1_baud,
         k_param_serial2_baud,
         k_param_sat_angles,
+        k_param_sat_angle_deriv,
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -335,6 +336,7 @@ public:
     AP_Int16        gps_hdop_good;              // GPS Hdop value at or below this value represent a good position
     
     AP_Int16        sat_angles;                 // Saturation limit for roll-pitch target angles 
+    AP_Int16        sat_angle_deriv;            // Saturation limit for target derivative
 
     AP_Int8         compass_enabled;
     AP_Int8         optflow_enabled;

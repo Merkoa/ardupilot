@@ -538,7 +538,11 @@
 */
 
 #ifndef SAT_ANGLES_DEFAULT
- # define SAT_ANGLES_DEFAULT        4500
+ # define SAT_ANGLES_DEFAULT        1000
+#endif
+
+#ifndef SAT_ANGLE_DERIV_DEFAULT
+ # define SAT_ANGLE_DERIV_DEFAULT        10
 #endif
 
 // RTL Mode
