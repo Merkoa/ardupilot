@@ -34,6 +34,7 @@
 #define ROLL_PITCH_LOITER           5       // pilot inputs the desired horizontal velocities
 #define ROLL_PITCH_SPORT            6       // pilot inputs roll, pitch rotation rates in earth frame
 #define ROLL_PITCH_AUTOTUNE         7       // description of new roll-pitch mode
+#define ROLL_PITCH_STAB_SAT         8       // same as stable but with saturation in target and target rate
 
 #define THROTTLE_MANUAL                     0   // manual throttle mode - pilot input goes directly to motors
 #define THROTTLE_MANUAL_TILT_COMPENSATED    1   // mostly manual throttle but with some tilt compensation

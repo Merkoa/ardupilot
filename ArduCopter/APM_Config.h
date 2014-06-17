@@ -50,3 +50,7 @@
 //#define USERHOOK_MEDIUMLOOP userhook_MediumLoop();        // for code to be run at 10hz
 //#define USERHOOK_SLOWLOOP userhook_SlowLoop();            // for code to be run at 3.3hz
 //#define USERHOOK_SUPERSLOWLOOP userhook_SuperSlowLoop();  // for code to be run at 1hz
+
+#define SPORT_RP    ROLL_PITCH_STAB_SAT
+#define SPORT_YAW   YAW_HOLD
+#define SPORT_THR   THROTTLE_MANUAL_TILT_COMPENSATED

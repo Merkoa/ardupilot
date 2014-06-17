@@ -1,6 +1,6 @@
 /// -*- tab-width: 4; Mode: C++; c-basic-offset: 4; indent-tabs-mode: nil -*-
 
-#define THISFIRMWARE "ArduCopter V3.1.5"
+#define THISFIRMWARE "ArduCopter V3.1.5-rc2"
 /*
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -1555,6 +1555,11 @@ bool set_roll_pitch_mode(uint8_t new_roll_pitch_mode)
             reset_roll_pitch_in_filters(g.rc_1.control_in, g.rc_2.control_in);
             roll_pitch_initialised = true;
             break;
+        case ROLL_PITCH_STAB_SAT:
+            // same as STAB but resetting stored targets
+            reset_roll_pitch_in_filters_sat(g.rc_1.control_in, g.rc_2.control_in);
+            roll_pitch_initialised = true;
+            break;
         case ROLL_PITCH_ACRO:
             // reset acro level rates
             acro_roll_rate = 0;
@@ -1652,6 +1657,18 @@ void update_roll_pitch_mode(void)
 
         break;
 
+    case ROLL_PITCH_STAB_SAT:
+        // apply SIMPLE mode transform
+        update_simple_mode();
+
+        // convert pilot input to lean angles
+        get_pilot_desired_lean_angles_raw(g.rc_1.control_in, g.rc_2.control_in, control_roll, control_pitch);
+
+        // pass desired roll, pitch to stabilize attitude controllers
+        get_stab_sat_roll(control_roll);
+        get_stab_sat_pitch(control_pitch);
+
+        break;
     case ROLL_PITCH_AUTO:
         // copy latest output from nav controller to stabilize controller
         control_roll = wp_nav.get_desired_roll();

@@ -98,6 +98,8 @@ public:
         k_param_angle_rate_max,
         k_param_rssi_range,
         k_param_rc_feel_rp,             // 40
+        k_param_sat_angles,
+        k_param_sat_angle_deriv,        // 42
 
         // 65: AP_Limits Library
         k_param_limits = 65,            // deprecated - remove
@@ -323,6 +325,9 @@ public:
     AP_Int16        angle_max;                  // maximum lean angle of the copter in centi-degrees
     AP_Int32        angle_rate_max;             // maximum rotation rate in roll/pitch axis requested by angle controller used in stabilize, loiter, rtl, auto flight modes
     AP_Int8         rc_feel_rp;                 // controls vehicle response to user input with 0 being extremely soft and 100 begin extremely crisp
+    
+    AP_Int32        sat_angles;                 // Saturation limit for roll-pitch target angles 
+    AP_Int32        sat_angle_deriv;            // Saturation limit for target derivative
     
     // Waypoints
     //

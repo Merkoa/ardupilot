@@ -4,10 +4,23 @@
 float roll_in_filtered;     // roll-in in filtered with RC_FEEL_RP parameter
 float pitch_in_filtered;    // pitch-in filtered with RC_FEEL_RP parameter
 
+// scoped variables
+static  int32_t     prev_target_roll;
+static  int32_t     prev_target_pitch;
+
 static void reset_roll_pitch_in_filters(int16_t roll_in, int16_t pitch_in)
 {
     roll_in_filtered = constrain_int16(roll_in, -ROLL_PITCH_INPUT_MAX, ROLL_PITCH_INPUT_MAX);
     pitch_in_filtered = constrain_int16(pitch_in, -ROLL_PITCH_INPUT_MAX, ROLL_PITCH_INPUT_MAX);
+}
+
+static void reset_roll_pitch_in_filters_sat(int16_t roll_in, int16_t pitch_in)
+{
+    roll_in_filtered = constrain_int16(roll_in, -ROLL_PITCH_INPUT_MAX, ROLL_PITCH_INPUT_MAX);
+    pitch_in_filtered = constrain_int16(pitch_in, -ROLL_PITCH_INPUT_MAX, ROLL_PITCH_INPUT_MAX);
+    // reset previous targets
+    prev_target_roll = 0;
+    prev_taget_pitch = 0;
 }
 
 // get_pilot_desired_angle - transform pilot's roll or pitch input into a desired lean angle
@@ -58,6 +71,14 @@ static void get_pilot_desired_lean_angles(int16_t roll_in, int16_t pitch_in, int
     // convert pilot input to lean angle
     roll_out = (int16_t)(roll_in_filtered * _scaler);
     pitch_out = (int16_t)(pitch_in_filtered * _scaler);
+}
+
+// get_pilot_desired_angle_raw - passes pilot's roll or pitch input to the main controllers without rescaling or constrain
+// returns desired angle in centi-degrees
+static void get_pilot_desired_lean_angles_raw(int16_t roll_in, int16_t pitch_in, int16_t &roll_out, int16_t &pitch_out)
+{
+    roll_out = roll_in;
+    pitch_out = pitch_in;
 }
 
 static void
@@ -120,6 +141,63 @@ get_stabilize_yaw(int32_t target_angle)
 
     // set targets for rate controller
     set_yaw_rate_target(target_rate, EARTH_FRAME);
+}
+
+// stab_sat roll-pitch controllers with target saturation
+static void
+get_stab_sat_roll(int32_t target_angle)
+{
+    /////////////////////////////////////////////////
+    // APPLY HERE TARGET SATURATION FOR ROLL-PITCH //
+    /////////////////////////////////////////////////
+    
+    // Linear saturation
+    target_angle = constrain_int32(target_angle,-g.sat_angles,g.sat_angles);
+    // Target rate saturation
+    target_angle = constrain_int32(target_angle,prev_target_roll - g.sat_angle_deriv,prev_target_roll + g.sat_angle_deriv);
+    prev_target_roll = target_angle;
+    
+    // angle error
+    target_angle = wrap_180_cd(target_angle - ahrs.roll_sensor);
+
+    // convert to desired rate
+    int32_t target_rate = g.pi_stabilize_roll.kP() * target_angle;
+
+    // constrain the target rate
+    if (!ap.disable_stab_rate_limit) {
+        target_rate = constrain_int32(target_rate, -g.angle_rate_max, g.angle_rate_max);
+    }
+
+    // set targets for rate controller
+    set_roll_rate_target(target_rate, EARTH_FRAME);
+}
+
+static void
+get_stab_sat_pitch(int32_t target_angle)
+{
+    /////////////////////////////////////////////////
+    // APPLY HERE TARGET SATURATION FOR ROLL-PITCH //
+    /////////////////////////////////////////////////
+    
+    // Linear saturation
+    target_angle = constrain_int32(target_angle,-g.sat_angles,g.sat_angles);
+    // Target rate saturation
+    target_angle = constrain_int32(target_angle,prev_target_pitch - g.sat_angle_deriv,prev_target_pitch + g.sat_angle_deriv);
+    prev_target_pitch = target_angle;
+    
+    // angle error
+    target_angle            = wrap_180_cd(target_angle - ahrs.pitch_sensor);
+
+    // convert to desired rate
+    int32_t target_rate = g.pi_stabilize_pitch.kP() * target_angle;
+
+    // constrain the target rate
+    if (!ap.disable_stab_rate_limit) {
+        target_rate = constrain_int32(target_rate, -g.angle_rate_max, g.angle_rate_max);
+    }
+
+    // set targets for rate controller
+    set_pitch_rate_target(target_rate, EARTH_FRAME);
 }
 
 // get_acro_level_rates - calculate earth frame rate corrections to pull the copter back to level while in ACRO mode

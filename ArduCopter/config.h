@@ -242,6 +242,18 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// Stab w saturation defaults
+//
+
+#ifndef SAT_ANGLES_DEFAULT
+ # define SAT_ANGLES_DEFAULT        1000
+#endif
+
+#ifndef SAT_ANGLE_DERIV_DEFAULT
+ # define SAT_ANGLE_DERIV_DEFAULT        10
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
 // Channel 7 and 8 default options
 //
 

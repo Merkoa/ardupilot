@@ -107,6 +107,24 @@ const AP_Param::Info var_info[] PROGMEM = {
     // @User: Standard
     GSCALAR(sonar_gain,     "SONAR_GAIN",           SONAR_GAIN_DEFAULT),
 
+    // @Param: SAT_ANGLES
+    // @DisplayName: Angle Saturation constant
+    // @Description: Constrains target angle for roll-pitch in STAB_SAT mode and SPORT mode.
+    // @Units: centidegrees
+    // @Range: 0 4500
+    // @Increment: 50
+    // @User: Advanced
+    GSCALAR(sat_angles, "SAT_ANGLES", SAT_ANGLES_DEFAULT),
+    
+    // @Param: SAT_ANGLE_DERIV
+    // @DisplayName: Target angle's derivative saturation constant
+    // @Description: Constrains target angle's derivative for roll-pitch in STAB_SAT mode and SPORT mode.
+    // @Units: centidegrees / 0.01s
+    // @Range: 0 4500
+    // @Increment: 50
+    // @User: Advanced
+    GSCALAR(sat_angle_deriv, "SAT_ANGLE_DERIV", SAT_ANGLE_DERIV_DEFAULT),
+    
     // @Param: FS_BATT_ENABLE
     // @DisplayName: Battery Failsafe Enable
     // @Description: Controls whether failsafe will be invoked when battery voltage or current runs low
